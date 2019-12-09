@@ -174,7 +174,7 @@ class CfgData:
 
 ##end utility functions
 
-def _setupEgammaUpdator(eleSrc,phoSrc,cfg):
+def _setupEgammaPreVIDUpdator(eleSrc,phoSrc,cfg):
     """
     This function updates the electrons and photons to form the basis for VID/energy correction
     Examples are updates to new dataformats and applications of the energy regression
@@ -387,7 +387,7 @@ def _setupEgammaVID(eleSrc,phoSrc,cfg):
     return eleSrc,phoSrc
 
 
-def _setupEgammaEmbedder(eleSrc,phoSrc,cfg):
+def _setupEgammaPostVIDUpdator(eleSrc,phoSrc,cfg):
     from RecoEgamma.EgammaTools.egammaObjectModificationsInMiniAOD_cff import egamma_modifications,egamma8XLegacyEtScaleSysModifier
     from RecoEgamma.EgammaTools.egammaObjectModifications_tools import makeVIDBitsModifier,makeVIDinPATIDsModifier,makeEnergyScaleAndSmearingSysModifier  
     process = cfg.process
@@ -479,10 +479,10 @@ def _setupEgammaPostRecoSeq(*args,**kwargs):
     phoSrc = cms.InputTag(srcPhoLabel,processName=cms.InputTag.skipCurrentProcess())
     eleSrc = cms.InputTag(srcEleLabel,processName=cms.InputTag.skipCurrentProcess())
 
-    eleSrc,phoSrc = _setupEgammaUpdator(eleSrc=eleSrc,phoSrc=phoSrc,cfg=cfg)
+    eleSrc,phoSrc = _setupEgammaPreVIDUpdator(eleSrc=eleSrc,phoSrc=phoSrc,cfg=cfg)
     eleSrc,phoSrc = _setupEgammaEnergyCorrections(eleSrc=eleSrc,phoSrc=phoSrc,cfg=cfg)
     eleSrc,phoSrc = _setupEgammaVID(eleSrc=eleSrc,phoSrc=phoSrc,cfg=cfg)
-    eleSrc,phoSrc = _setupEgammaEmbedder(eleSrc=eleSrc,phoSrc=phoSrc,cfg=cfg)
+    eleSrc,phoSrc = _setupEgammaPostVIDUpdator(eleSrc=eleSrc,phoSrc=phoSrc,cfg=cfg)
     
     process = cfg.process
     
