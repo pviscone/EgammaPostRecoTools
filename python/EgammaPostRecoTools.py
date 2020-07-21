@@ -152,6 +152,7 @@ class CfgData:
             'runEnergyCorrections' : True,
             'applyEPCombBug' : False,
             'autoAdjustParams' : True,
+            'computeHeepTrkPtIso' : True,
             'process' : None
         }
         #I hate this hack but easiest way to communicate that the preVID updator is running
@@ -334,7 +335,7 @@ def _setupEgammaVID(eleSrc,phoSrc,cfg):
     process.egammaVIDTask = cms.Task()
     if cfg.runVID:
         #heep value map needs to be manually added to the task
-        if not _isULDataformat():
+        if not _isULDataformat() and cfg.computeHeepTrkPtIso:
             import RecoEgamma.ElectronIdentification.Identification.heepElectronID_tools as heep_tools
             heep_tools.addHEEPProducersToSeq(process,cms.Sequence(),cfg.isMiniAOD,process.egammaVIDTask)
         process.egammaVIDTask.add(process.egmGsfElectronIDTask)
@@ -416,7 +417,7 @@ def _setupEgammaPostVIDUpdator(eleSrc,phoSrc,cfg):
         #MVA V2 values may not be added by default due to data format consistency issues
         _addMissingMVAValuesToUserData(process,egamma_modifications)
         #now add HEEP trk isolation if old dataformat (new its in the object proper)
-        if not _isULDataformat():
+        if not _isULDataformat() and cfg.computeHeepTrkPtIso:
             for pset in egamma_modifications:
                 if pset.hasParameter("modifierName") and pset.modifierName == cms.string('EGExtraInfoModifierFromFloatValueMaps'):
                     pset.electron_config.heepTrkPtIso = cms.InputTag("heepIDVarValueMaps","eleTrkPtIso")
@@ -512,7 +513,11 @@ def setupEgammaPostRecoSeq(process,
                            runVID=True,
                            runEnergyCorrections=True,
                            applyEPCombBug=False,
-                           autoAdjustParams=True):
+                           autoAdjustParams=True,
+                           computeHeepTrkPtIso=True):
+    """
+    Note: computeHeepTrkPtIso can't be set to false if you want to run a HEEP ID.
+    """
     #first check if we are running in a valid release, will throw if not
     _validRelease()
 
@@ -539,7 +544,7 @@ def setupEgammaPostRecoSeq(process,
 
 
 
-    _setupEgammaPostRecoSeq(process,applyEnergyCorrections=applyEnergyCorrections,applyVIDOnCorrectedEgamma=applyVIDOnCorrectedEgamma,era=era,runVID=runVID,runEnergyCorrections=runEnergyCorrections,applyEPCombBug=applyEPCombBug,isMiniAOD=isMiniAOD)
+    _setupEgammaPostRecoSeq(process,applyEnergyCorrections=applyEnergyCorrections,applyVIDOnCorrectedEgamma=applyVIDOnCorrectedEgamma,era=era,runVID=runVID,runEnergyCorrections=runEnergyCorrections,applyEPCombBug=applyEPCombBug,isMiniAOD=isMiniAOD, computeHeepTrkPtIso=computeHeepTrkPtIso)
     
 
     return process
