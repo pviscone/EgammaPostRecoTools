@@ -84,7 +84,7 @@ else:
     print "EgammaPostRecoTools: Fall17V2 cut based Photons ID modules not found, running ID without them. If you want Fall17V2 CutBased Photon IDs, please merge the approprate PR\n  94X:  git cms-merge-topic cms-egamma/EgammaID_949\n  102X: git cms-merge-topic cms-egamma/EgammaID_1023"
 
 def _check_valid_era(era):
-    valid_eras = ['2017-Nov17ReReco','2016-Legacy','2016-Feb17ReMiniAOD','2018-Prompt','2016-UL', '2017-UL', '2018-UL']
+    valid_eras = ['2017-Nov17ReReco','2016-Legacy','2016-Feb17ReMiniAOD','2018-Prompt','2016preVFP-UL', '2016postVFP-UL', '2017-UL', '2018-UL']
     if era not in valid_eras:
         raise RuntimeError('error, era {} not in list of allowed eras {}'.format(value,str(valid_eras)))
     return True
@@ -104,9 +104,10 @@ def _getEnergyCorrectionFile(era):
         return "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_24Feb2020_runEtaR9Gain_v2"
     if era=="2018-UL":
         return "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2018_29Sep2020_RunFineEtaR9Gain"
-        
-    if era=="2016-UL":
-        raise RuntimeError('Error in postRecoEgammaTools, era 2016-UL does not yet have energy corrections, please contact the e/gamma pog for more information')
+    if era=="2016preVFP-UL":
+        return "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_preVFP_RunFineEtaR9Gain"
+    if era=="2016postVFP-UL":
+        return "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_postVFP_RunFineEtaR9Gain"
 
     raise LogicError('Error in postRecoEgammaTools, era '+era+' not added to energy corrections function, please update this function')
 
