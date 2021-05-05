@@ -13,7 +13,8 @@ def _validRelease():
     allowedVersions = { 8 : [0],
                         9 : [4],
                         10 : [2,6],
-                        11 : [0,1]
+                        11 : [0,3],
+                        12 : [0,1]
                         }
                 
     if majorVersion not in allowedVersions:
