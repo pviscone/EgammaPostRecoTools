@@ -16,6 +16,8 @@ git-cms-addpkg RecoEgamma/EgammaTools
 
 git-cms-addpkg EgammaAnalysis/ElectronTools
 
+scram b -j8
+
 **For Run3 Scales + smearing corrections** 
 
 The Run3 Scale and smearing files should be available here : EgammaAnalysis/ElectronTools/data/ScalesSmearings
