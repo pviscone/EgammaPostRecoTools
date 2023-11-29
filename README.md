@@ -37,7 +37,7 @@ The electron and photon ID config files should be changed in [1] and [2] for add
 
 In the analysis config file for producing ntuple, the follwing code block needs to be added :
                                                                                                               
-from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
+from EgammaPostRecoTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 
 setupEgammaPostRecoSeq (process,
 
