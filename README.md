@@ -25,7 +25,7 @@ The path to the correction file should be added here : https://github.com/Prasan
 
 For Run3 electron and photon IDs : 
 
-The electron and photon ID config files should be changed in [1] and [2] :
+The electron and photon ID config files should be changed in [1] and [2] for adding the new IDs :
 
 [1] https://github.com/cms-sw/cmssw/tree/master/RecoEgamma/ElectronIdentification/python/Identification
 
@@ -76,6 +76,4 @@ setupEgammaPostRecoSeq (process,
 
 In the final cms path we need to add "process.egammaPostRecoSeq" to add the IDs and corrections to the MiniAOD and produce a new collection of SlimmedElectron and SlimmedPhoton.
 
-process.p = cms.Path ( process.egammaPostRecoSeq *
-
-	    	      process.ggNtuplizer )
+process.p = cms.Path ( process.egammaPostRecoSeq * process.ggNtuplizer)
