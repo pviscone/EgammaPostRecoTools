@@ -28,13 +28,14 @@ For Run3 electron and photon IDs :
 The electron and photon ID config files should be changed in [1] and [2] :
 
 [1] https://github.com/cms-sw/cmssw/tree/master/RecoEgamma/ElectronIdentification/python/Identification
+
 [2] https://github.com/cms-sw/cmssw/tree/master/RecoEgamma/PhotonIdentification/python/Identification
 
 In the analysis config file for producing ntuple, the follwing code block needs to be added :
                                                                                                               
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 
-setupEgammaPostRecoSeq(process,
+setupEgammaPostRecoSeq (process,
 
                        runEnergyCorrections=True,
 		       
@@ -73,6 +74,8 @@ setupEgammaPostRecoSeq(process,
 
 
 
-In the final cms path we need to add "process.egammaPostRecoSeq" as well.
+In the final cms path we need to add "process.egammaPostRecoSeq" to add the IDs and corrections to the MiniAOD and produce a new collection of SlimmedElectron and SlimmedPhoton.
 
-process.p = cms.Path( process.egammaPostRecoSeq * process.ggNtuplizer )
+process.p = cms.Path ( process.egammaPostRecoSeq *
+
+	    	      process.ggNtuplizer )
