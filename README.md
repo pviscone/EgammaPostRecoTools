@@ -16,14 +16,14 @@ git-cms-addpkg RecoEgamma/EgammaTools
 
 git-cms-addpkg EgammaAnalysis/ElectronTools
 
-For Run3 Scales + smearing corrections :
+** For Run3 Scales + smearing corrections ** 
 
 The Run3 Scale and smearing files should be available here : EgammaAnalysis/ElectronTools/data/ScalesSmearings
 
 The path to the correction file should be added here : https://github.com/Prasant1993/EgammaPostRecoTools/blob/Update_Run3ID_electronNoIso_MiniAOD/python/EgammaPostRecoTools.py#L117
 
 
-For Run3 electron and photon IDs : 
+** For Run3 electron and photon IDs ** 
 
 The electron and photon ID config files should be changed in [1] and [2] for adding the new IDs :
 
