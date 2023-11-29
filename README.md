@@ -31,6 +31,8 @@ The electron and photon ID config files should be changed in [1] and [2] for add
 
 [2] https://github.com/cms-sw/cmssw/tree/master/RecoEgamma/PhotonIdentification/python/Identification
 
+**Changes to be made in the Analysis config file to add the IDs and corrections to MiniAOD** 
+
 In the analysis config file for producing ntuple, the follwing code block needs to be added :
                                                                                                               
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
