@@ -14,7 +14,7 @@ def _validRelease():
                         9 : [4],
                         10 : [2,6],
                         11 : [0,1,2,3],
-                        12 : [0,1]
+                        12 : [0,1,4,6]
                         }
                 
     if majorVersion not in allowedVersions:
@@ -43,11 +43,16 @@ _defaultEleIDModules =  [ 'RecoEgamma.ElectronIdentification.Identification.heep
                         'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
                         'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff',
                         'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_HZZ_V1_cff',
+                        'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_iso_V1_cff',
+                        'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_noIso_V1_cff',
+                        'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Winter22_122X_V1_cff'
                         ]
 _defaultPhoIDModules =  [ 'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V1_TrueVtx_cff',
                         'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V1p1_cff', 
                         'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Spring16_V2p2_cff',
-                        'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring16_nonTrig_V1_cff'
+                        'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring16_nonTrig_V1_cff',
+                        'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_RunIIIWinter22_122X_V1_cff',
+                        'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Winter22_122X_V1_cff'  
                         ]
 if not _isULDataformat:
     #was depreciated due to the new e/gamma dataformat for UL
@@ -72,20 +77,20 @@ _fall17V2EleIDModules = [
 if pkgutil.find_loader(_fall17V2EleIDModules[0]) != None:
     _defaultEleIDModules.extend(_fall17V2EleIDModules)
 else:
-    print "EgammaPostRecoTools: Fall17V2 electron modules not found, running ID without them. If you want Fall17V2 IDs, please merge the approprate PR\n  94X:  git cms-merge-topic cms-egamma/EgammaID_949"
+    print ("EgammaPostRecoTools: Fall17V2 electron modules not found, running ID without them. If you want Fall17V2 IDs, please merge the approprate PR\n  94X:  git cms-merge-topic cms-egamma/EgammaID_949")
 
 if pkgutil.find_loader(_fall17V2PhoMVAIDModules[0]) != None:
     _defaultPhoIDModules.extend(_fall17V2PhoMVAIDModules)
 else:
-    print "EgammaPostRecoTools: Fall17V2 MVA photon modules not found, running ID without them. If you want Fall17V2 MVA Photon IDs, please merge the approprate PR\n  94X:  git cms-merge-topic cms-egamma/EgammaID_949\n  102X: git cms-merge-topic cms-egamma/EgammaID_1023"
+    print ("EgammaPostRecoTools: Fall17V2 MVA photon modules not found, running ID without them. If you want Fall17V2 MVA Photon IDs, please merge the approprate PR\n  94X:  git cms-merge-topic cms-egamma/EgammaID_949\n  102X: git cms-merge-topic cms-egamma/EgammaID_1023")
 
 if pkgutil.find_loader(_fall17V2PhoCutIDModules[0]) != None:
     _defaultPhoIDModules.extend(_fall17V2PhoCutIDModules)
 else:
-    print "EgammaPostRecoTools: Fall17V2 cut based Photons ID modules not found, running ID without them. If you want Fall17V2 CutBased Photon IDs, please merge the approprate PR\n  94X:  git cms-merge-topic cms-egamma/EgammaID_949\n  102X: git cms-merge-topic cms-egamma/EgammaID_1023"
+    print ("EgammaPostRecoTools: Fall17V2 cut based Photons ID modules not found, running ID without them. If you want Fall17V2 CutBased Photon IDs, please merge the approprate PR\n  94X:  git cms-merge-topic cms-egamma/EgammaID_949\n  102X: git cms-merge-topic cms-egamma/EgammaID_1023")
 
 def _check_valid_era(era):
-    valid_eras = ['2017-Nov17ReReco','2016-Legacy','2016-Feb17ReMiniAOD','2018-Prompt','2016preVFP-UL', '2016postVFP-UL', '2017-UL', '2018-UL']
+    valid_eras = ['2022-Prompt', '2017-Nov17ReReco','2016-Legacy','2016-Feb17ReMiniAOD','2018-Prompt','2016preVFP-UL', '2016postVFP-UL', '2017-UL', '2018-UL']
     if era not in valid_eras:
         raise RuntimeError('error, era {} not in list of allowed eras {}'.format(value,str(valid_eras)))
     return True
@@ -109,6 +114,8 @@ def _getEnergyCorrectionFile(era):
         return "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_preVFP_RunFineEtaR9Gain_v3"
     if era=="2016postVFP-UL":
         return "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_postVFP_RunFineEtaR9Gain_v1"
+    if era=="2022-Prompt":
+        return "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Step3_scale_step2_smearings/step4_Prompt2022FG_28_06_2023_v0"
 
     raise LogicError('Error in postRecoEgammaTools, era '+era+' not added to energy corrections function, please update this function')
 
@@ -178,10 +185,10 @@ class CfgData:
         if len(args)>1: 
             raise Exception('error multiple unnamed parameters pass to EgammaPostRecoTools')
         
-        for k,v in self.defaults.iteritems():
+        for k,v in self.defaults.items():
             setattr(self,k,v)
         
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             if k not in self.defaults:
                 raise Exception('error parameter {} not recognised'.format(k))
             setattr(self,k,v)
@@ -218,15 +225,15 @@ def _setupEgammaPreVIDUpdator(eleSrc,phoSrc,cfg):
             #this is here as a reminder when we fix this bug
             egamma8XObjectUpdateModifier.ecalRecHitsEB = cms.InputTag("reducedEcalRecHitsEB","")
             egamma8XObjectUpdateModifier.ecalRecHitsEE = cms.InputTag("reducedEcalRecHitsEE","")
-            print "EgammaPostRecoTools: begin warning:"
-            print "   when running in 80X AOD, currenly do not fill 94X new data members "
-            print "   members not filled: "
-            print "      eles: e2x5Left, e2x5Right, e2x5Top, e2x5Bottom, nSaturatedXtals, isSeedSaturated"
-            print "      phos: nStaturatedXtals, isSeedSaturated"
-            print "   these are needed for the 80X energy regression if you are running it (if you dont know if  you are, you are not)"
-            print "   the miniAOD method fills them correctly"
-            print "   if you have a use case for AOD and need those members, contact e/gamma pog and we can find a solution"
-            print "EgammaPostRecoTools: end warning"
+            print ("EgammaPostRecoTools: begin warning:")
+            print ("   when running in 80X AOD, currenly do not fill 94X new data members ")
+            print ("   members not filled: ")
+            print ("      eles: e2x5Left, e2x5Right, e2x5Top, e2x5Bottom, nSaturatedXtals, isSeedSaturated")
+            print ("      phos: nStaturatedXtals, isSeedSaturated")
+            print ("   these are needed for the 80X energy regression if you are running it (if you dont know if  you are, you are not)")
+            print ("   the miniAOD method fills them correctly")
+            print ("   if you have a use case for AOD and need those members, contact e/gamma pog and we can find a solution")
+            print ("EgammaPostRecoTools: end warning")
         else:
             modifiers.append(egamma8XObjectUpdateModifier)
     if (_isInputFrom80X(cfg.era) or _isInputFrom94XTo102X(cfg.era)) and _isULDataformat(): 
@@ -574,7 +581,7 @@ def setupEgammaPostRecoSeq(process,
 
     if autoAdjustParams:
         if ((era=="2016-UL") and runEnergyCorrections):
-            print "EgammaPostRecoTools:INFO auto adjusting runEnergyCorrections to False as they are not yet availible for 2016-UL, set autoAdjustParams = False to force them to run"
+            print ("EgammaPostRecoTools:INFO auto adjusting runEnergyCorrections to False as they are not yet availible for 2016-UL, set autoAdjustParams = False to force them to run")
             runEnergyCorrections = False
 
 
