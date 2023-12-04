@@ -38,17 +38,17 @@ setupEgammaPostRecoSeq(process,
                        runEnergyCorrections=True,
                        runVID=True,
                        era='2022-Prompt',
-                       eleIDModules=[ 'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_iso_V1_cff',
-                                      'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_noIso_V1_cff',
-                                      'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Winter22_122X_V1_cff'],
+                       eleIDModules=['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_iso_V1_cff',
+                                     'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_noIso_V1_cff',
+                                     'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Winter22_122X_V1_cff'],
 				     
-                        phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_RunIIIWinter22_122X_V1_cff',
-                                      'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Winter22_122X_V1_cff']
+                       phoIDModules=['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_RunIIIWinter22_122X_V1_cff',
+                                     'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Winter22_122X_V1_cff']
                       )
 ```
 
 In your cms path, you need to add "process.egammaPostRecoSeq" to add the IDs and corrections to the MiniAOD and produce a new collection of SlimmedElectron and SlimmedPhoton:
 
 ```
-process.p = cms.Path ( process.egammaPostRecoSeq * process.ggNtuplizer)
+process.p = cms.Path (process.egammaPostRecoSeq * process.ggNtuplizer)
 ```
