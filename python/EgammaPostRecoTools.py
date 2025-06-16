@@ -16,6 +16,8 @@ def _validRelease():
                         11 : [0,1,2,3],
                         12 : [0,1,4,6],
                         13 : [0,1,3]
+                        14 : [0,1,2]
+                        15 : [0,1]
                         }
                 
     if majorVersion not in allowedVersions:
