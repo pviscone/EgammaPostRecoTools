@@ -473,13 +473,13 @@ def _setupEgammaPostVIDUpdator(eleSrc,phoSrc,cfg):
         if hasattr(pset,"electron_config"): pset.electron_config.electronSrc = eleSrc
         if hasattr(pset,"photon_config"): pset.photon_config.photonSrc = phoSrc
 
-    process.slimmedElectrons = cms.EDProducer("ModifiedElectronProducer",
+    process.customSlimmedElectrons = cms.EDProducer("ModifiedElectronProducer",
                                               src=eleSrc,
                                               modifierConfig = cms.PSet(
                                                   modifications = egamma_modifications
                                                   )
                                               )
-    process.slimmedPhotons = cms.EDProducer("ModifiedPhotonProducer",
+    process.customSlimmedPhotons = cms.EDProducer("ModifiedPhotonProducer",
                                             src=phoSrc,
                                             modifierConfig = cms.PSet(
                                                 modifications = egamma_modifications
@@ -489,8 +489,8 @@ def _setupEgammaPostVIDUpdator(eleSrc,phoSrc,cfg):
    
     #we only run if the modifications are going to do something
     if egamma_modifications != cms.VPSet() or cfg.runningPreVIDUpdator:
-        process.egammaPostRecoPatUpdatorTask.add(process.slimmedElectrons)
-        process.egammaPostRecoPatUpdatorTask.add(process.slimmedPhotons)
+        process.egammaPostRecoPatUpdatorTask.add(process.customSlimmedElectrons)
+        process.egammaPostRecoPatUpdatorTask.add(process.customSlimmedPhotons)
         return eleSrc,phoSrc
     else:
         return cms.InputTag(eleSrc.value()),cms.InputTag(phoSrc.value())
@@ -499,7 +499,7 @@ def _setupEgammaPostRecoSeq(*args,**kwargs):
     """
     This function loads the calibrated producers calibratedPatElectrons,calibratedPatPhotons, 
     sets VID & other modules to the correct electron/photon source,
-    loads up the modifiers and which then creates a new slimmedElectrons,slimmedPhotons collection
+    loads up the modifiers and which then creates a new customSlimmedElectrons,customSlimmedPhotons collection
     with VID and scale and smearing all loaded in
 
     It runs internally in four steps
